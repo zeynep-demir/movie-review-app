@@ -14,7 +14,7 @@ export default function ReviewScreen({ route }) {
     }
   
     axios
-      .get(`${API_URL}/api/reviews/${movieId}`)
+      .get(`${API_URL}/reviews/${movieId}`)
       .then((response) => setReviews(response.data.reverse())) // Reverse to show latest first
       .catch((error) => {
         console.error('Error fetching reviews:', error);

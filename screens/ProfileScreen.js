@@ -66,7 +66,7 @@ export default function ProfileScreen({ navigation }) {
   const handleRemoveFromWatchlist = async (movieId) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      await axios.delete(`${API_URL}/api/watchlist/${movieId}`, {
+      await axios.delete(`${API_URL}/watchlist/${movieId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

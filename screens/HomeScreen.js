@@ -83,7 +83,7 @@ export default function HomeScreen({ navigation }) {
       }
 
       const response = await axios.post(
-        `${API_URL}/api/movies/${movieId}/add-to-watchlist`,
+        `${API_URL}/movies/${movieId}/add-to-watchlist`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

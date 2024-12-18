@@ -30,14 +30,14 @@ const MovieDetailsScreen = ({ route, navigation }) => {
 
   const fetchMovieDetails = () => {
     axios
-      .get(`${API_URL}/api/movies/${movieId}`)
+      .get(`${API_URL}/movies/${movieId}`)
       .then((response) => setMovie(response.data))
       .catch((error) => console.error('Error fetching movie details:', error));
   };
 
   const fetchReviews = () => {
     axios
-      .get(`${API_URL}/api/reviews/${movieId}`)
+      .get(`${API_URL}/reviews/${movieId}`)
       .then((response) => setReviews(response.data))
       .catch((error) => console.error('Error fetching reviews:', error));
   };

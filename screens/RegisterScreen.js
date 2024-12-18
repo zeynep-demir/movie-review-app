@@ -34,7 +34,7 @@ export default function RegisterScreen({ navigation }) {
 
     try {
       // API isteği IP adresi kullanarak yapılır
-      const response = await axios.post(`${API_URL}/api/auth/register`, {
+      const response = await axios.post(`${API_URL}/auth/register`, {
         email,
         username,
         password,
