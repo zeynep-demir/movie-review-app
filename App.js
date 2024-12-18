@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Text, View, StyleSheet, Dimensions, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthProvider, AuthContext } from './AuthContext';
-import Toast from 'react-native-toast-message'; // Import Toast
+import Toast from 'react-native-toast-message';
 
 import HomeScreen from './screens/HomeScreen';
 import MovieDetailsScreen from './screens/MovieDetailsScreen';
@@ -14,6 +14,8 @@ import RegisterScreen from './screens/RegisterScreen';
 import LoginScreen from './screens/LoginScreen';
 import GuestHomeScreen from './screens/GuestHomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
+
+import { API_URL } from './config'; // Import API_URL
 
 const Stack = createStackNavigator();
 const { width } = Dimensions.get('window');
