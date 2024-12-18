@@ -11,6 +11,7 @@ import {
   Image,
 } from 'react-native';
 import axios from 'axios';
+import { API_URL } from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../AuthContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -39,17 +40,17 @@ export default function ProfileScreen({ navigation }) {
         return;
       }
 
-      const profileResponse = await axios.get('http://localhost:5001/api/auth/profile', {
+      const profileResponse = await axios.get('${API_URL}/api/auth/profile', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(profileResponse.data);
 
-      const watchlistResponse = await axios.get('http://localhost:5001/api/watchlist', {
+      const watchlistResponse = await axios.get('${API_URL}/api/watchlist', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setWatchlist(watchlistResponse.data.watchlist || []);
 
-      const reviewsResponse = await axios.get('http://localhost:5001/api/reviews/user', {
+      const reviewsResponse = await axios.get('${API_URL}/api/reviews/user', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(reviewsResponse.data);
@@ -65,7 +66,7 @@ export default function ProfileScreen({ navigation }) {
   const handleRemoveFromWatchlist = async (movieId) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      await axios.delete(`http://localhost:5001/api/watchlist/${movieId}`, {
+      await axios.delete(`${API_URL}/api/watchlist/${movieId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

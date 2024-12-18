@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export default function ReviewScreen({ route }) {
   const { movieId } = route.params; // movieId route parametrelerinden alınır
@@ -13,7 +14,7 @@ export default function ReviewScreen({ route }) {
     }
   
     axios
-      .get(`http://localhost:5001/api/reviews/${movieId}`)
+      .get(`${API_URL}/api/reviews/${movieId}`)
       .then((response) => setReviews(response.data.reverse())) // Reverse to show latest first
       .catch((error) => {
         console.error('Error fetching reviews:', error);

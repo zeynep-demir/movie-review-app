@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import axios from "axios";
+import { API_URL } from '../config';
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 
 // Responsive card layout
@@ -39,7 +40,7 @@ export default function GuestHomeScreen({ navigation }) {
 
   const fetchMovies = () => {
     axios
-      .get("http://localhost:5001/api/movies/genres")
+      .get("${API_URL}/api/movies/genres")
       .then((response) => {
         setMoviesByGenre(response.data);
         setFilteredMoviesByGenre(response.data);

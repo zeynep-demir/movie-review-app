@@ -2,6 +2,7 @@ import { Platform } from 'react-native'; // Import Platform API
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -33,7 +34,7 @@ export default function RegisterScreen({ navigation }) {
 
     try {
       // API isteği IP adresi kullanarak yapılır
-      const response = await axios.post(`http://localhost:5001/api/auth/register`, {
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
         email,
         username,
         password,

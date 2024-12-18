@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { AuthContext } from "../AuthContext";
+import { API_URL } from '../config';
 
 // Screen size detection
 const { width } = Dimensions.get("window");
@@ -41,7 +42,7 @@ export default function HomeScreen({ navigation }) {
 
   const fetchMoviesByGenre = () => {
     axios
-      .get("http://localhost:5001/api/movies/genres")
+      .get("${API_URL}/api/movies/genres")
       .then((response) => {
         setMoviesByGenre(response.data);
         setFilteredMovies(response.data);
@@ -82,7 +83,7 @@ export default function HomeScreen({ navigation }) {
       }
 
       const response = await axios.post(
-        `http://localhost:5001/api/movies/${movieId}/add-to-watchlist`,
+        `${API_URL}/api/movies/${movieId}/add-to-watchlist`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

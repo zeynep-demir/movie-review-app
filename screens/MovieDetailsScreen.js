@@ -13,6 +13,7 @@ import axios from 'axios';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import { AuthContext } from '../AuthContext';
+import { API_URL } from '../config';
 
 const { width } = Dimensions.get('window');
 
@@ -29,14 +30,14 @@ const MovieDetailsScreen = ({ route, navigation }) => {
 
   const fetchMovieDetails = () => {
     axios
-      .get(`http://localhost:5001/api/movies/${movieId}`)
+      .get(`${API_URL}/api/movies/${movieId}`)
       .then((response) => setMovie(response.data))
       .catch((error) => console.error('Error fetching movie details:', error));
   };
 
   const fetchReviews = () => {
     axios
-      .get(`http://localhost:5001/api/reviews/${movieId}`)
+      .get(`${API_URL}/api/reviews/${movieId}`)
       .then((response) => setReviews(response.data))
       .catch((error) => console.error('Error fetching reviews:', error));
   };

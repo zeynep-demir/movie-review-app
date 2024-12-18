@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../AuthContext';
 import api from '../services/api';
 import Toast from 'react-native-toast-message';
+import { API_URL } from '../config';
 
 export default function LoginScreen({ navigation }) {
   const [emailOrUsername, setEmailOrUsername] = useState('');

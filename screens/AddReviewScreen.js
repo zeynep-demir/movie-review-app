@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Stars from 'react-native-stars';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
+import { API_URL } from '../config';
 
 export default function AddReviewScreen({ route, navigation }) {
   const { movieId, fetchReviews } = route.params; // Passed from MovieDetailsScreen
@@ -39,7 +40,7 @@ export default function AddReviewScreen({ route, navigation }) {
 
       // Send the review to the backend
       const response = await axios.post(
-        'http://localhost:5001/api/reviews',
+        '${API_URL}/api/reviews',
         newReview,
         { headers: { Authorization: `Bearer ${token}` } }
       );
