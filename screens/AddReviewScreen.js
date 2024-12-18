@@ -40,7 +40,7 @@ export default function AddReviewScreen({ route, navigation }) {
 
       // Send the review to the backend
       const response = await axios.post(
-        '${API_URL}/api/reviews',
+        `${API_URL}/reviews`,
         newReview,
         { headers: { Authorization: `Bearer ${token}` } }
       );

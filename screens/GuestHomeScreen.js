@@ -40,7 +40,7 @@ export default function GuestHomeScreen({ navigation }) {
 
   const fetchMovies = () => {
     axios
-      .get("${API_URL}/api/movies/genres")
+      .get(`${API_URL}/movies/genres`)
       .then((response) => {
         setMoviesByGenre(response.data);
         setFilteredMoviesByGenre(response.data);

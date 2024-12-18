@@ -40,17 +40,17 @@ export default function ProfileScreen({ navigation }) {
         return;
       }
 
-      const profileResponse = await axios.get('${API_URL}/api/auth/profile', {
+      const profileResponse = await axios.get(`${API_URL}/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(profileResponse.data);
 
-      const watchlistResponse = await axios.get('${API_URL}/api/watchlist', {
+      const watchlistResponse = await axios.get(`${API_URL}/watchlist`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setWatchlist(watchlistResponse.data.watchlist || []);
 
-      const reviewsResponse = await axios.get('${API_URL}/api/reviews/user', {
+      const reviewsResponse = await axios.get(`${API_URL}/reviews/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(reviewsResponse.data);
