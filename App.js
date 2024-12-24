@@ -15,8 +15,6 @@ import LoginScreen from './screens/LoginScreen';
 import GuestHomeScreen from './screens/GuestHomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
-import { API_URL } from './config'; // Import API_URL
-
 const Stack = createStackNavigator();
 const { width } = Dimensions.get('window');
 const isMobile = width <= 768;
