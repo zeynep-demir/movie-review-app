@@ -114,6 +114,15 @@ export default function HomeScreen({ navigation }) {
         style={styles.addButton}
         onPress={() => handleAddToWatchlist(item._id)}
       >
+        <TouchableOpacity
+        style={styles.addButton}
+        onPress={(e) => {
+          e.stopPropagation();
+          handleWatchlistClick();
+        }}
+      >
+        
+      </TouchableOpacity>
         <Ionicons name="add" size={20} color="#fff" />
       </TouchableOpacity>
       <Image
