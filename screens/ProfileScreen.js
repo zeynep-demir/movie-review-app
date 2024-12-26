@@ -15,6 +15,7 @@ import { API_URL } from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../AuthContext';
 import { Ionicons } from '@expo/vector-icons';
+import LazyImage from '../components/LazyImage';
 
 export default function ProfileScreen({ navigation }) {
   const { logout, watchlistUpdated, setWatchlistUpdated } = useContext(AuthContext);
@@ -94,7 +95,11 @@ export default function ProfileScreen({ navigation }) {
 
   const renderWatchlistItem = ({ item }) => (
     <View style={styles.card}>
-      <Image source={{ uri: item.poster }} style={styles.posterImage} />
+      <LazyImage
+        src={item.poster}
+        style={styles.posterImage}
+        placeholder="https://via.placeholder.com/300x450"
+      />
       <Text style={styles.movieTitle}>{item.title}</Text>
       <TouchableOpacity
         style={styles.deleteButton}

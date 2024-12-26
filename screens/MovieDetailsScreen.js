@@ -14,6 +14,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import { AuthContext } from '../AuthContext';
 import { API_URL } from '../config';
+import LazyImage from '../components/LazyImage';
 
 const { width } = Dimensions.get('window');
 
@@ -74,10 +75,10 @@ const MovieDetailsScreen = ({ route, navigation }) => {
       {/* Movie Header Section */}
       <View style={styles.centeredContent}>
         <View style={styles.headerSection}>
-          <Image
-            source={{ uri: movie.poster || 'https://via.placeholder.com/150' }}
-            style={styles.poster}
-          />
+        <Image
+  source={{ uri: movie.poster || 'https://via.placeholder.com/300x450' }}
+  style={styles.poster}
+/>
           <View style={styles.overlay} />
           <View style={styles.headerContent}>
             <Text style={styles.title}>{movie.title}</Text>

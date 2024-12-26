@@ -14,6 +14,7 @@ import Toast from "react-native-toast-message";
 import axios from "axios";
 import { API_URL } from '../config';
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import LazyImage from "../components/LazyImage";
 
 // Responsive card layout
 const { width } = Dimensions.get("window");
@@ -86,34 +87,37 @@ export default function GuestHomeScreen({ navigation }) {
     });
   };
 
-  const renderMovieCard = ({ item }) => (
+
+const renderMovieCard = ({ item }) => (
+  <TouchableOpacity
+    style={[styles.movieCard, { width: cardWidth, height: cardHeight }]}
+    onPress={() => navigation.navigate("MovieDetails", { movieId: item._id })}
+  >
     <TouchableOpacity
-      style={[styles.movieCard, { width: cardWidth, height: cardHeight }]}
-      onPress={() => navigation.navigate("MovieDetails", { movieId: item._id })}
+      style={styles.addButton}
+      onPress={(e) => {
+        e.stopPropagation();
+        handleWatchlistClick();
+      }}
     >
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={(e) => {
-          e.stopPropagation();
-          handleWatchlistClick();
-        }}
-      >
-        <Ionicons name="add" size={20} color="#fff" />
-      </TouchableOpacity>
-      <Image
-        source={{ uri: item.poster || "https://via.placeholder.com/150" }}
-        style={styles.poster}
-      />
-      <View style={styles.ratingContainer}>
-        <MaterialIcons name="star" size={16} color="#FFD700" />
-        <Text style={styles.ratingText}>{item.averageRating || "N/A"}</Text>
-      </View>
-      <Text style={styles.movieTitle} numberOfLines={1}>
-        {item.title}
-      </Text>
-      <Text style={styles.movieReleaseDate}>{item.releaseDate}</Text>
+      <Ionicons name="add" size={20} color="#fff" />
     </TouchableOpacity>
-  );
+    <LazyImage
+      src={item.poster}
+      style={styles.poster}
+      placeholder="https://via.placeholder.com/300x450" // Placeholder URL
+    />
+    <View style={styles.ratingContainer}>
+      <MaterialIcons name="star" size={16} color="#FFD700" />
+      <Text style={styles.ratingText}>{item.averageRating || "N/A"}</Text>
+    </View>
+    <Text style={styles.movieTitle} numberOfLines={1}>
+      {item.title}
+    </Text>
+    <Text style={styles.movieReleaseDate}>{item.releaseDate}</Text>
+  </TouchableOpacity>
+);
+
 
   return (
     <ScrollView style={styles.container}>

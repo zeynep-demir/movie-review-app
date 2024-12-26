@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { AuthContext } from "../AuthContext";
 import { API_URL } from '../config';
+import LazyImage from "../components/LazyImage";
 
 // Screen size detection
 const { width } = Dimensions.get("window");
@@ -117,7 +118,11 @@ export default function HomeScreen({ navigation }) {
       >
         <Ionicons name="add" size={20} color="#fff" />
       </TouchableOpacity>
-      <Image source={{ uri: item.poster }} style={styles.poster} />
+      <LazyImage
+        src={item.poster}
+        style={styles.poster}
+        placeholder="https://via.placeholder.com/300x450" // Placeholder URL
+      />
       <View style={styles.ratingContainer}>
         <Ionicons name="star" size={16} color="#FFD700" />
         <Text style={styles.ratingText}>
