@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  Image,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
@@ -31,7 +30,6 @@ export default function HomeScreen({ navigation }) {
   const [moviesByGenre, setMoviesByGenre] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredMovies, setFilteredMovies] = useState([]);
-  const [isInputFocused, setIsInputFocused] = useState(false); // To track input focus state
   const { watchlistUpdated, setWatchlistUpdated } = useContext(AuthContext);
 
   const { cardWidth } = getCardDimensions();
@@ -143,7 +141,7 @@ export default function HomeScreen({ navigation }) {
         <View
           style={[
             styles.textFieldContainer,
-            isInputFocused && styles.textFieldFocused,
+            searchQuery.length > 0 && styles.textFieldFocused,
           ]}
         >
           <TextInput
@@ -152,9 +150,7 @@ export default function HomeScreen({ navigation }) {
             placeholderTextColor="#888"
             value={searchQuery}
             onChangeText={setSearchQuery}
-            onFocus={() => setIsInputFocused(true)} // On focus
-            onBlur={() => setIsInputFocused(false)} // On blur
-            onSubmitEditing={handleSearch} // Trigger search on Enter
+            onSubmitEditing={handleSearch}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity style={styles.clearButton} onPress={clearSearch}>
@@ -170,9 +166,7 @@ export default function HomeScreen({ navigation }) {
       {/* Genre Sections */}
       {filteredMovies.map((genre) => (
         <View key={genre._id} style={styles.genreSection}>
-          <View style={styles.genreHeader}>
-            <Text style={styles.genreTitle}>{genre._id}</Text>
-          </View>
+          <Text style={styles.genreTitle}>{genre._id}</Text>
           <FlatList
             data={genre.movies}
             renderItem={renderMovieCard}
@@ -203,21 +197,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#333",
     borderRadius: 25,
     paddingHorizontal: 10,
-    transition: "background-color 0.2s",
   },
   textFieldFocused: {
-    backgroundColor: "#333333", // Lighter color when focused
+    backgroundColor: "#555",
   },
   searchInput: {
     flex: 1,
     color: "#fff",
     paddingVertical: 8,
     fontSize: 16,
-    outlineStyle: "none",
   },
-  clearButton: {
-    marginLeft: 5,
-  },
+  clearButton: { marginLeft: 5 },
   searchButton: {
     backgroundColor: "#6200EE",
     padding: 12,
@@ -225,20 +215,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   genreSection: { marginBottom: 20 },
-  genreHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  genreTitle: { 
-    color: "#fff", 
-    fontSize: 18, 
-    fontWeight: "bold" 
-  },
-  movieListContainer: { 
-    paddingHorizontal: 10 
-  },
+  genreTitle: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  movieListContainer: { paddingHorizontal: 10 },
   movieCard: {
     backgroundColor: "#1c1c1c",
     borderRadius: 8,
@@ -249,25 +227,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     right: 5,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     padding: 5,
-    zIndex: 1,
     borderRadius: 15,
   },
   poster: { width: "100%", height: "70%" },
-  ratingContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 5,
-  },
+  ratingContainer: { flexDirection: "row", justifyContent: "center", marginTop: 5 },
   ratingText: { color: "#FFD700", marginLeft: 5 },
-  movieTitle: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginTop: 5,
-  },
-  movieReleaseDate: { color: "#bbb", fontSize: 12, marginTop: 3, textAlign: "center" },
+  movieTitle: { color: "#fff", fontSize: 14, fontWeight: "bold", textAlign: "center" },
+  movieReleaseDate: { color: "#bbb", fontSize: 12, textAlign: "center" },
 });
-

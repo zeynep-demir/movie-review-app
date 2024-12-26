@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -12,7 +11,7 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import axios from "axios";
-import { API_URL } from '../config';
+import { API_URL } from "../config";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import LazyImage from "../components/LazyImage";
 
@@ -22,7 +21,7 @@ const { width } = Dimensions.get("window");
 const getCardDimensions = () => {
   if (width > 1200) return { cardWidth: width / 6 - 20 }; // 6 cards per row
   if (width > 768) return { cardWidth: width / 4 - 20 };  // 4 cards per row
-  return { cardWidth: width / 2.5 - 20 };                // 2.5 cards per row
+  return { cardWidth: width / 2.5 - 20 }; // Mobile: 2.5 cards per row
 };
 
 export default function GuestHomeScreen({ navigation }) {
@@ -87,37 +86,48 @@ export default function GuestHomeScreen({ navigation }) {
     });
   };
 
-
-const renderMovieCard = ({ item }) => (
-  <TouchableOpacity
-    style={[styles.movieCard, { width: cardWidth, height: cardHeight }]}
-    onPress={() => navigation.navigate("MovieDetails", { movieId: item._id })}
-  >
+  const renderMovieCard = ({ item }) => (
     <TouchableOpacity
-      style={styles.addButton}
-      onPress={(e) => {
-        e.stopPropagation();
-        handleWatchlistClick();
-      }}
+      style={[styles.movieCard, { width: cardWidth, height: cardHeight }]}
+      onPress={() => navigation.navigate("MovieDetails", { movieId: item._id })}
     >
-      <Ionicons name="add" size={20} color="#fff" />
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={(e) => {
+          e.stopPropagation();
+          handleWatchlistClick();
+        }}
+      >
+        <Ionicons name="add" size={20} color="#fff" />
+      </TouchableOpacity>
+      <LazyImage
+        src={item.poster}
+        style={styles.poster}
+        placeholder="https://via.placeholder.com/300x450" // Placeholder URL
+      />
+      <View style={styles.ratingContainer}>
+        <MaterialIcons name="star" size={16} color="#FFD700" />
+        <Text style={styles.ratingText}>{item.averageRating || "N/A"}</Text>
+      </View>
+      <Text style={styles.movieTitle} numberOfLines={1}>
+        {item.title}
+      </Text>
+      <Text style={styles.movieReleaseDate}>{item.releaseDate}</Text>
     </TouchableOpacity>
-    <LazyImage
-      src={item.poster}
-      style={styles.poster}
-      placeholder="https://via.placeholder.com/300x450" // Placeholder URL
-    />
-    <View style={styles.ratingContainer}>
-      <MaterialIcons name="star" size={16} color="#FFD700" />
-      <Text style={styles.ratingText}>{item.averageRating || "N/A"}</Text>
-    </View>
-    <Text style={styles.movieTitle} numberOfLines={1}>
-      {item.title}
-    </Text>
-    <Text style={styles.movieReleaseDate}>{item.releaseDate}</Text>
-  </TouchableOpacity>
-);
+  );
 
+  const renderGenreSection = ({ item }) => (
+    <View style={styles.genreSection}>
+      <Text style={styles.genreTitle}>{item._id}</Text>
+      <FlatList
+        data={item.movies}
+        renderItem={renderMovieCard}
+        keyExtractor={(movie) => movie._id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+    </View>
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -137,7 +147,7 @@ const renderMovieCard = ({ item }) => (
             onChangeText={setSearchQuery}
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
-            onSubmitEditing={handleSearch} // Trigger search on Enter
+            onSubmitEditing={handleSearch}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity style={styles.clearButton} onPress={handleClearSearch}>
@@ -151,21 +161,16 @@ const renderMovieCard = ({ item }) => (
       </View>
 
       {/* Error Message */}
-      {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
-
-      {/* Genre Sections */}
-      {filteredMoviesByGenre.map((genre) => (
-        <View key={genre._id} style={styles.genreSection}>
-          <Text style={styles.genreTitle}>{genre._id}</Text>
-          <FlatList
-            data={genre.movies}
-            renderItem={renderMovieCard}
-            keyExtractor={(item) => item._id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
-      ))}
+      {errorMessage ? (
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
+      ) : (
+        <FlatList
+          data={filteredMoviesByGenre}
+          renderItem={renderGenreSection}
+          keyExtractor={(genre) => genre._id}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       <Toast />
     </ScrollView>
@@ -173,11 +178,7 @@ const renderMovieCard = ({ item }) => (
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: "#121212", 
-    paddingTop: 10 
-  },
+  container: { flex: 1, backgroundColor: "#121212", paddingTop: 10 },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -191,40 +192,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",
-    transition: "background-color 0.2s",
   },
   textFieldFocused: {
-    backgroundColor: "#333333", // Lighter background on focus
+    backgroundColor: "#444",
   },
   searchInput: {
     flex: 1,
     color: "#fff",
     paddingVertical: 8,
     fontSize: 16,
-    outlineStyle: "none",
   },
-  clearButton: { 
-    marginLeft: 5 
-  },
+  clearButton: { marginLeft: 5 },
   searchButton: {
     backgroundColor: "#6200EE",
     padding: 12,
     borderRadius: 25,
     marginLeft: 10,
   },
-  errorMessage: { 
-    color: "red", 
-    textAlign: "center", 
-    marginBottom: 10 
-  },
-  genreSection: { 
-    marginBottom: 20 
-  },
-  genreTitle: { 
-    color: "#fff", 
-    fontSize: 18, 
-    fontWeight: "bold", 
-    marginLeft: 10, 
+  errorMessage: { color: "red", textAlign: "center", marginBottom: 10 },
+  genreSection: { marginBottom: 20 },
+  genreTitle: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
     marginBottom: 5,
   },
   movieCard: {
@@ -242,30 +233,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
     borderRadius: 15,
   },
-  poster: { 
-    width: "100%", 
-    height: "70%" 
-  },
-  ratingContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 5,
-  },
-  ratingText: { 
-    color: "#FFD700", 
-    marginLeft: 5 
-  },
-  movieTitle: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginTop: 5,
-  },
-  movieReleaseDate: {
-    color: "#bbb",
-    fontSize: 12,
-    textAlign: "center",
-    marginTop: 3,
-  },
+  poster: { width: "100%", height: "70%" },
+  ratingContainer: { flexDirection: "row", justifyContent: "center", marginTop: 5 },
+  ratingText: { color: "#FFD700", marginLeft: 5 },
+  movieTitle: { color: "#fff", fontSize: 14, fontWeight: "bold", textAlign: "center" },
+  movieReleaseDate: { color: "#bbb", fontSize: 12, textAlign: "center" },
 });
