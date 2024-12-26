@@ -239,8 +239,10 @@ const styles = StyleSheet.create({
     right: 5,
     backgroundColor: "rgba(0,0,0,0.5)",
     padding: 5,
+    zIndex: 1,
     borderRadius: 15,
   },
+  
   poster: { width: "100%", height: "70%" },
   ratingContainer: { flexDirection: "row", justifyContent: "center", marginTop: 5 },
   ratingText: { color: "#FFD700", marginLeft: 5 },
