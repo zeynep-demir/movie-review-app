@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
   TextInput,
+  Image,
 } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,7 +16,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { AuthContext } from "../AuthContext";
 import { API_URL } from '../config';
-import LazyImage from "../components/LazyImage";
 
 // Screen size detection
 const { width } = Dimensions.get("window");
@@ -116,10 +116,11 @@ export default function HomeScreen({ navigation }) {
       >
         <Ionicons name="add" size={20} color="#fff" />
       </TouchableOpacity>
-      <LazyImage
-        src={item.poster}
+      <Image
+        source={{ uri: item.poster || "https://via.placeholder.com/300x450" }}
         style={styles.poster}
-        placeholder="https://via.placeholder.com/300x450" // Placeholder URL
+        onLoad={() => console.log("Image loaded for:", item.poster)}
+        onError={(e) => console.log("Image failed to load for:", item.poster, e.nativeEvent.error)}
       />
       <View style={styles.ratingContainer}>
         <Ionicons name="star" size={16} color="#FFD700" />

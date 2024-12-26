@@ -8,19 +8,19 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Image,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import axios from "axios";
 import { API_URL } from "../config";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-import LazyImage from "../components/LazyImage";
 
 // Responsive card layout
 const { width } = Dimensions.get("window");
 
 const getCardDimensions = () => {
   if (width > 1200) return { cardWidth: width / 6 - 20 }; // 6 cards per row
-  if (width > 768) return { cardWidth: width / 4 - 20 };  // 4 cards per row
+  if (width > 768) return { cardWidth: width / 4 - 20 }; // 4 cards per row
   return { cardWidth: width / 2.5 - 20 }; // Mobile: 2.5 cards per row
 };
 
@@ -100,10 +100,13 @@ export default function GuestHomeScreen({ navigation }) {
       >
         <Ionicons name="add" size={20} color="#fff" />
       </TouchableOpacity>
-      <LazyImage
-        src={item.poster}
+      <Image
+        source={{ uri: item.poster || "https://via.placeholder.com/300x450" }}
         style={styles.poster}
-        placeholder="https://via.placeholder.com/300x450" // Placeholder URL
+        onLoad={() => console.log("Image loaded for:", item.title)}
+        onError={() =>
+          console.log("Image failed to load, showing placeholder for:", item.title)
+        }
       />
       <View style={styles.ratingContainer}>
         <MaterialIcons name="star" size={16} color="#FFD700" />
