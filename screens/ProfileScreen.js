@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef } from "react";
 import {
   View,
   Text,
@@ -9,13 +9,12 @@ import {
   ActivityIndicator,
   Alert,
   Image,
-} from 'react-native';
-import axios from 'axios';
-import { API_URL } from '../config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthContext } from '../AuthContext';
-import { Ionicons } from '@expo/vector-icons';
-import LazyImage from '../components/LazyImage';
+} from "react-native";
+import axios from "axios";
+import { API_URL } from "../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../AuthContext";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ProfileScreen({ navigation }) {
   const { logout, watchlistUpdated, setWatchlistUpdated } = useContext(AuthContext);
@@ -34,9 +33,9 @@ export default function ProfileScreen({ navigation }) {
 
   const fetchProfileData = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
       if (!token) {
-        Alert.alert('Error', 'You must be signed in to access your profile.');
+        Alert.alert("Error", "You must be signed in to access your profile.");
         setLoading(false);
         return;
       }
@@ -58,15 +57,15 @@ export default function ProfileScreen({ navigation }) {
 
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching profile data:', error);
-      Alert.alert('Error', 'Failed to fetch profile data.');
+      console.error("Error fetching profile data:", error);
+      Alert.alert("Error", "Failed to fetch profile data.");
       setLoading(false);
     }
   };
 
   const handleRemoveFromWatchlist = async (movieId) => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
       await axios.delete(`${API_URL}/watchlist/${movieId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -76,11 +75,11 @@ export default function ProfileScreen({ navigation }) {
         prevWatchlist.filter((movie) => movie._id !== movieId)
       );
 
-      Alert.alert('Success', 'Movie removed from your watchlist.');
+      Alert.alert("Success", "Movie removed from your watchlist.");
       setWatchlistUpdated(true); // Trigger watchlist update
     } catch (error) {
-      console.error('Error removing movie:', error);
-      Alert.alert('Error', 'Failed to remove the movie. Please try again.');
+      console.error("Error removing movie:", error);
+      Alert.alert("Error", "Failed to remove the movie. Please try again.");
     }
   };
 
@@ -88,17 +87,20 @@ export default function ProfileScreen({ navigation }) {
     logout(() => {
       navigation.reset({
         index: 0,
-        routes: [{ name: 'GuestHome' }],
+        routes: [{ name: "GuestHome" }],
       });
     });
   };
 
   const renderWatchlistItem = ({ item }) => (
     <View style={styles.card}>
-      <LazyImage
-        src={item.poster}
+      <Image
+        source={{ uri: item.poster || "https://via.placeholder.com/300x450" }}
         style={styles.posterImage}
-        placeholder="https://via.placeholder.com/300x450"
+        onLoad={() => console.log("Image loaded for:", item.title)}
+        onError={() =>
+          console.log("Image failed to load, showing placeholder for:", item.title)
+        }
       />
       <Text style={styles.movieTitle}>{item.title}</Text>
       <TouchableOpacity
@@ -112,33 +114,23 @@ export default function ProfileScreen({ navigation }) {
 
   const renderReviewItem = ({ item }) => (
     <View style={styles.reviewCard}>
-      {/* User Avatar or Placeholder */}
       <View style={styles.reviewHeader}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>
-            {item.movieTitle ? item.movieTitle.charAt(0).toUpperCase() : '?'}
+            {item.movieTitle ? item.movieTitle.charAt(0).toUpperCase() : "?"}
           </Text>
         </View>
-        <Text style={styles.reviewMovieTitle}>{item.movieTitle || 'Unknown Movie'}</Text>
+        <Text style={styles.reviewMovieTitle}>{item.movieTitle || "Unknown Movie"}</Text>
       </View>
-  
-      {/* Review Body */}
       <Text style={styles.reviewText} numberOfLines={3}>
-        {item.review || 'No Review'}
+        {item.review || "No Review"}
       </Text>
-  
-      {/* Rating Section */}
       <View style={styles.ratingSection}>
         <Ionicons name="star" size={16} color="#FFD700" />
-        <Text style={styles.ratingText}>{item.rating || 'N/A'}/10</Text>
+        <Text style={styles.ratingText}>{item.rating || "N/A"}/10</Text>
       </View>
     </View>
   );
-  
-  
-  
-  
-  
 
   if (loading) {
     return (
@@ -195,95 +187,61 @@ export default function ProfileScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#121212', padding: 10 },
-  profileSection: { alignItems: 'center', marginBottom: 20 },
-  profileHeader: { fontSize: 22, fontWeight: 'bold', color: '#FFFFFF' },
-  profileSubtext: { fontSize: 16, color: '#BBBBBB' },
+  container: { flex: 1, backgroundColor: "#121212", padding: 10 },
+  profileSection: { alignItems: "center", marginBottom: 20 },
+  profileHeader: { fontSize: 22, fontWeight: "bold", color: "#FFFFFF" },
+  profileSubtext: { fontSize: 16, color: "#BBBBBB" },
   section: { marginBottom: 20 },
-  header: { fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 10 },
+  header: { fontSize: 20, fontWeight: "bold", color: "#FFFFFF", marginBottom: 10 },
   card: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderRadius: 10,
     margin: 5,
     width: 120,
     aspectRatio: 2 / 3,
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  posterImage: { width: '100%', height: '100%' },
-  movieTitle: { position: 'absolute', bottom: 10, left: 10, fontSize: 14, color: '#FFFFFF' },
-  deleteButton: { position: 'absolute', top: 8, right: 8, borderRadius: 12, padding: 4 },
-  movieReview: { fontSize: 14, color: '#BBBBBB', marginTop: 10, textAlign: 'center' },
-  logoutButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FF4444',
-    padding: 8,
-    borderRadius: 5,
+  posterImage: { width: "100%", height: "100%" },
+  movieTitle: {
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    fontSize: 14,
+    color: "#FFFFFF",
   },
+  deleteButton: { position: "absolute", top: 8, right: 8, borderRadius: 12, padding: 4 },
   reviewCard: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: "#1E1E1E",
     borderRadius: 12,
     padding: 15,
     marginHorizontal: 10,
     marginVertical: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 3,
-    width: 250, // Wider cards for better content display
+    width: 250,
   },
-  
-  reviewHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  
+  reviewHeader: { flexDirection: "row", alignItems: "center", marginBottom: 8 },
   avatar: {
-    backgroundColor: '#3f51b5',
+    backgroundColor: "#3f51b5",
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 10,
   },
-  
-  avatarText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+  avatarText: { color: "#FFFFFF", fontSize: 16, fontWeight: "bold" },
+  reviewMovieTitle: { color: "#FFFFFF", fontSize: 16, fontWeight: "bold" },
+  reviewText: { color: "#BBBBBB", fontSize: 14, lineHeight: 18, marginBottom: 10 },
+  ratingSection: { flexDirection: "row", alignItems: "center", marginTop: 5 },
+  ratingText: { marginLeft: 5, color: "#FFD700", fontSize: 14, fontWeight: "bold" },
+  logoutButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF4444",
+    padding: 8,
+    borderRadius: 5,
   },
-  
-  reviewMovieTitle: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  
-  reviewText: {
-    color: '#BBBBBB',
-    fontSize: 14,
-    lineHeight: 18,
-    marginBottom: 10,
-  },
-  
-  ratingSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
-  
-  ratingText: {
-    marginLeft: 5,
-    color: '#FFD700',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  
-  logoutText: { color: '#FFFFFF', fontSize: 14, fontWeight: 'bold' },
+  logoutText: { color: "#FFFFFF", fontSize: 14, fontWeight: "bold" },
 });
